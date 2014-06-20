@@ -1,5 +1,5 @@
 class HitsController < ApplicationController
-  before_action :authenticate_user! 
+  before_action :authenticate_user!
   before_action :set_hit, only: [:show, :edit, :update, :destroy]
 
   # GET /hits
@@ -15,7 +15,8 @@ class HitsController < ApplicationController
 
   # GET /hits/new
   def new
-    @hit = Hit.new
+    @hit = current_user.hits.build
+    # @hit = Hit.new
   end
 
   # GET /hits/1/edit
@@ -25,7 +26,8 @@ class HitsController < ApplicationController
   # POST /hits
   # POST /hits.json
   def create
-    @hit = Hit.new(hit_params)
+    @hit = current_user.hits.build(hit_params)
+    # @hit = Hit.new(hit_params)
 
     respond_to do |format|
       if @hit.save
@@ -65,11 +67,13 @@ class HitsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_hit
-      @hit = Hit.find(params[:id])
+        @hit = current_user.hits.find(params[:id])
+      # @hit = Hit.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def hit_params
-      params.require(:hit).permit(:message, :user_id)
+        params.require(:hit).permit(:message)
+      # params.require(:hit).permit(:message, :user_id)
     end
 end
